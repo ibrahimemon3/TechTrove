@@ -6,6 +6,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import { useState } from 'react';
 import RefrshHandler from './RefrshHandler';
+import SearchPage from './pages/SearchPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App(){
 
@@ -19,9 +21,11 @@ function App(){
     <div className='App'>
        <RefrshHandler setIsAuthenticated={setIsAuthenticated} />
       <Routes>
-      <Route path='/' element={<Navigate to="/login"/>} />
+      <Route path='/' element={<Navigate to="/login"/>} />      
         <Route path='/login' element={<Login/>} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/signup' element={<Signup/>} />
+        <Route path='/search' element={<SearchPage/>} />
+        <Route path='/profilePage' element={<ProfilePage/>} />
         <Route path='/home' element={<PrivateRoute element={<Home />} />} />
       </Routes>
     </div>
