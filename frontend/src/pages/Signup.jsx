@@ -25,7 +25,7 @@ function Signup() {
       return handleError('Enter name,email and password');
     }
     try {
-      const url = "https://tech-trove-api.vercel.app/auth/signup";
+      const url = "http://localhost:8080/auth/signup";
       const response = await fetch(url, {
         method: "POST",
         headers: {

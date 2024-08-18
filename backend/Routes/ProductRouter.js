@@ -1,20 +1,67 @@
-const ensureAuthenticated = require('../Middlewares/Auth');
-
-
 const router = require('express').Router();
+const ensureAuthenticated = require('../Middlewares/Auth');
+const ProductModel = require('../Models/Product');
 
-router.get('/', ensureAuthenticated, (req, res) => {
-    console.log('---- logged in user detail ---', req.user);
-    res.status(200).json([
-        {
-            name: "mobile",
-            price: 10000
-        },
-        {
-            name: "tv",
-            price: 20000
+// Create Product with Image
+router.post('/', ensureAuthenticated, async (req, res) => {
+    try {
+        const { category, productName, price, brand, image } = req.body;
+
+        const product = new ProductModel({
+            category,
+            productName,
+            price,
+            brand,
+            image, // Store the base64-encoded image
+        });
+
+        await product.save();
+        res.status(201).json({ message: 'Product created successfully', product });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', err });
+    }
+});
+
+// Update Product with Image
+router.put('/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const { category, productName, price, brand, image } = req.body;
+        const product = await ProductModel.findByIdAndUpdate(
+            req.params.id,
+            { category, productName, price, brand, image },
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
         }
-    ])
+        res.status(200).json({ message: 'Product updated successfully', product });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', err });
+    }
+});
+
+// Read Products
+router.get('/', ensureAuthenticated, async (req, res) => {
+    try {
+        const products = await ProductModel.find();
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', err });
+    }
+});
+
+// Delete Product
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
+    try {
+        const product = await ProductModel.findByIdAndDelete(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(200).json({ message: 'Product deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal server error', err });
+    }
 });
 
 module.exports = router;
