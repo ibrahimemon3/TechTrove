@@ -24,7 +24,7 @@ function Login() {
       return handleError('Enter email and password');
     }
     try {
-      const url = "http://localhost:8080/auth/login";
+      const url = "https://tech-trove-api.vercel.app/auth/login";
       const response = await fetch(url, {
         method: "POST",
         headers: {
