@@ -1,46 +1,51 @@
 import React from "react";
 
-const Table = ({ products, handleEditProduct, handleDeleteProduct }) => (
-  <div className="mt-8 w-[40rem]">
-    <h2 className="text-xl font-bold mb-4">All Products</h2>
-    {products.length > 0 && (
-      <table className="w-full border-collapse bg-black text-left">
-        <thead>
-          <tr className="bg-gray-800 text-white">
-            <th className="p-2">Category</th>
-            <th className="p-2">Product Name</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Brand</th>
-            <th className="p-2">Actions</th>
+const Table = ({ products, onEdit, onDelete }) => {
+  return (
+    <table className="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-lg mt-8">
+      <thead>
+        <tr>
+          <th className="py-2 px-4 border-b">Product Image</th>
+          <th className="py-2 px-4 border-b">Category</th>
+          <th className="py-2 px-4 border-b">Product Name</th>
+          <th className="py-2 px-4 border-b">Price</th>
+          <th className="py-2 px-4 border-b">Brand</th>
+          <th className="py-2 px-4 border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.map((product, index) => (
+          <tr key={product._id}>
+            <td className="py-2 px-4 border-b">
+              {product.image ? (
+                <img src={product.image} alt={product.productName} className="h-16 w-16 object-cover rounded-md" />
+              ) : (
+                "No Image"
+              )}
+            </td>
+            <td className="py-2 px-4 border-b">{product.category}</td>
+            <td className="py-2 px-4 border-b">{product.productName}</td>
+            <td className="py-2 px-4 border-b">${product.price}</td>
+            <td className="py-2 px-4 border-b">{product.brand}</td>
+            <td className="py-2 px-4 border-b">
+              <button
+                onClick={() => onEdit(index)}
+                className="text-blue-500 hover:text-blue-700 mr-2"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => onDelete(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                Delete
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {products.map((product, index) => (
-            <tr key={index} className="bg-white border-b">
-              <td className="p-2">{product.category}</td>
-              <td className="p-2">{product.productName}</td>
-              <td className="p-2">{product.price}</td>
-              <td className="p-2">{product.brand}</td>
-              <td className="p-2 flex gap-2">
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded"
-                  onClick={() => handleEditProduct(index)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
-                  onClick={() => handleDeleteProduct(index)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    )}
-  </div>
-);
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default Table;

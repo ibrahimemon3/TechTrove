@@ -63,7 +63,7 @@ function Home() {
           <div className='relative'>
             <button
               onClick={togglePopup}
-              className='text-2xl focus:outline-none mr-4'  // Added margin to move the icon to the left
+              className='text-2xl focus:outline-none mr-4'  
             >
               <FontAwesomeIcon icon={faUser} />
             </button>
@@ -78,7 +78,7 @@ function Home() {
                 >
                   Logout
                 </button>
-                {/* Add more buttons here */}
+                {}
               </div>
             )}
           </div>
