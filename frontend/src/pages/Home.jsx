@@ -75,7 +75,7 @@ function Home() {
       </div>
       <div className='flex flex-col items-center w-full'>
         <div className='flex w-full justify-between items-center bg-gray-800 p-4 shadow-md'>
-          <button className='text-2xl text-white' onMouseOver={() => setSidebarVisible(true)}>
+          <button className='text-3xl text-white' onMouseOver={() => setSidebarVisible(true)}>
             <FontAwesomeIcon icon={faBars} />
           </button>
           <h1 className='text-2xl mb-5 text-white'>{loggedInUser}</h1>
