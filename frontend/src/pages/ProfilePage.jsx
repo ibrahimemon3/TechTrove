@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const [newUsername, setNewUsername] = useState('');
 
   useEffect(() => {
-   
+    // Fetch user information from localStorage
     const storedUsername = localStorage.getItem('loggedInUser');
     const storedEmail = localStorage.getItem('userEmail');
     setUsername(storedUsername || '');
@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
   const handleSaveClick = () => {
     setUsername(newUsername);
-    localStorage.setItem('loggedInUser', newUsername); 
+    localStorage.setItem('loggedInUser', newUsername); // Save the new username to localStorage
     setIsEditing(false);
   };
 
