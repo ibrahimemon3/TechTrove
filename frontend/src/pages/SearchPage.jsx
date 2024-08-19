@@ -1,10 +1,11 @@
 import React from 'react'
 import SearchForm from '../SearchForm'
+import Table from '../Table'
 import { ToastContainer } from 'react-toastify'
 
 const SearchPage = () => {
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
+    <div>
         <SearchForm />
         <ToastContainer />
     </div>
