@@ -115,12 +115,12 @@ const SearchForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-white py-8">
-      <form onSubmit={handleFormSubmit} className="flex flex-col lg:flex-row items-center gap-4 bg-aquamarine p-12 rounded-lg shadow-lg w-full max-w-screen-xl">
+    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-gray-200 py-8">
+      <form onSubmit={handleFormSubmit} className="flex flex-col lg:flex-row items-center gap-4 bg-gray-800 p-12 rounded-lg shadow-lg w-full max-w-screen-xl">
         <div className="flex flex-col gap-2 w-full">
           <div className="flex gap-4 mb-4 flex-wrap justify-center">
             {["Gaming Gear", "Phones and Tablets", "Accessories", "Camera", "Gadgets"].map((category) => (
-              <label key={category} className="flex items-center">
+              <label key={category} className="flex items-center text-gray-200">
                 <input
                   type="radio"
                   name="category"
@@ -139,7 +139,7 @@ const SearchForm = () => {
             placeholder="Product Name"
             value={filters.productName}
             onChange={handleInputChange}
-            className="w-full lg:w-80 mb-2 p-2 border border-gray-300 rounded-md"
+            className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
           />
           <input
             type="number"
@@ -147,7 +147,7 @@ const SearchForm = () => {
             placeholder="Price"
             value={filters.price}
             onChange={handleInputChange}
-            className="w-full lg:w-80 mb-2 p-2 border border-gray-300 rounded-md"
+            className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
           />
           <input
             type="text"
@@ -155,26 +155,26 @@ const SearchForm = () => {
             placeholder="Brand"
             value={filters.brand}
             onChange={handleInputChange}
-            className="w-full lg:w-80 mb-2 p-2 border border-gray-300 rounded-md"
+            className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-full lg:w-80 mb-2 p-2 border border-gray-300 rounded-md"
+            className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
           />
         </div>
         <div className="flex flex-col gap-2">
           <button
             type="button"
             onClick={handleAddProduct}
-            className="w-full lg:w-auto p-2 bg-gradient-to-br from-yellow-300 to-orange-500 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
+            className="w-full lg:w-auto p-2 bg-gradient-to-br from-yellow-500 to-orange-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
           >
             {editIndex !== null ? 'Update' : 'Add'} Product
           </button>
           <button
             type="submit"
-            className="w-full lg:w-auto p-2 bg-gradient-to-br from-blue-300 to-blue-500 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
+            className="w-full lg:w-auto p-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
           >
             Search
           </button>
