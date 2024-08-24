@@ -16,7 +16,7 @@ function Home() {
   const popupRef = useRef(null);
 
   useEffect(() => {
-    setLoggedInUser(localStorage.getItem('loggedInUser'));
+    setLoggedInUser(localStorage.getItem('loggedInUserName'));
 
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -37,7 +37,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://tech-trove-api.vercel.app/products', {
+      const response = await axios.get('http://localhost:8080/products', {
         headers: {
           Authorization: localStorage.getItem('token'),
         },
