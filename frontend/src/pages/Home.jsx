@@ -37,7 +37,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/products', {
+      const response = await axios.get('https://tech-trove-api.vercel.app/products', {
         headers: {
           Authorization: localStorage.getItem('token'),
         },
