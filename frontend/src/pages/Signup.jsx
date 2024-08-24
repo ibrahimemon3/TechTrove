@@ -7,22 +7,38 @@ function Signup() {
   const [signupInfo, setSignupInfo] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    image: '',
+    address: '', // Add address to state
   });
 
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const copySignupInfo = { ...signupInfo };
-    copySignupInfo[name] = value;
-    setSignupInfo(copySignupInfo);
+    setSignupInfo({
+      ...signupInfo,
+      [name]: value,
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSignupInfo((prevInfo) => ({
+        ...prevInfo,
+        image: reader.result, // Base64 string
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const { name, email, password } = signupInfo;
-    if (!name || !email || !password) {
-      return handleError('Enter name,email and password');
+    const { name, email, password, image, address } = signupInfo;
+    if (!name || !email || !password || !image || !address) {
+      return handleError('Please fill in all required fields.');
     }
     try {
       const url = "https://tech-trove-api.vercel.app/auth/signup";
@@ -41,13 +57,11 @@ function Signup() {
           navigate('/login');
         }, 1000);
       } else if (error) {
-        const details = error?.details[0].message;
-        handleError(details);
-      } else if (!success) {
-        handleError(message);
+        const details = error?.details[0]?.message;
+        handleError(details || message);
       }
     } catch (err) {
-      handleError(err);
+      handleError(err.message);
     }
   };
 
@@ -92,6 +106,27 @@ function Signup() {
               name='password'
               placeholder='Enter your password...'
               value={signupInfo.password}
+              className='w-full text-lg p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-opacity-50'
+            />
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='image' className='text-lg font-medium text-white'>Profile Picture</label>
+            <input
+              onChange={handleImageChange}
+              type='file'
+              name='image'
+              accept='image/*'
+              className='w-full text-lg p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-opacity-50'
+            />
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='address' className='text-lg font-medium text-white'>Address</label>
+            <input
+              onChange={handleChange}
+              type='text'
+              name='address'
+              placeholder='Enter your address...'
+              value={signupInfo.address}
               className='w-full text-lg p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-opacity-50'
             />
           </div>

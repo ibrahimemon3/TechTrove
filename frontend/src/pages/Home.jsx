@@ -16,7 +16,7 @@ function Home() {
   const popupRef = useRef(null);
 
   useEffect(() => {
-    setLoggedInUser(localStorage.getItem('loggedInUser'));
+    setLoggedInUser(localStorage.getItem('loggedInUserName'));
 
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {

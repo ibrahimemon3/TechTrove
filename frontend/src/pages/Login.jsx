@@ -33,12 +33,15 @@ function Login() {
         body: JSON.stringify(loginInfo)
       });
       const result = await response.json();
-      const { success, message, jwtToken, name, error } = result;
+      console.log("userdata ",result.user)
+      const { success, message, jwtToken, user, error } = result;
       if (success) {
         handleSuccess(message);
         localStorage.setItem('token', jwtToken);
-        localStorage.setItem('loggedInUser', name);
-
+        localStorage.setItem('loggedInUserEmail', result.user.email); 
+        localStorage.setItem('loggedinUserImage', result.user.image);
+        localStorage.setItem('loggedinUserAddress', result.user.address);
+        localStorage.setItem('loggedInUserName', result.user.name); 
         setTimeout(() => {
           navigate('/home');
         }, 1000);
