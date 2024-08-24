@@ -20,7 +20,7 @@
 
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/products', {
+        const response = await axios.get('https://tech-trove-api.vercel.app/products', {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
@@ -64,7 +64,7 @@
       try {
         if (editIndex !== null) {
           const updatedProduct = { ...filters };
-          const response = await axios.put(`http://localhost:8080/products/${products[editIndex]._id}`, updatedProduct, {
+          const response = await axios.put(`https://tech-trove-api.vercel.app/products/${products[editIndex]._id}`, updatedProduct, {
             headers: {
               Authorization: localStorage.getItem('token'),
             },
@@ -74,7 +74,7 @@
           setProducts(updatedProducts);
           setEditIndex(null);
         } else {
-          const response = await axios.post('http://localhost:8080/products', filters, {
+          const response = await axios.post('https://tech-trove-api.vercel.app/products', filters, {
             headers: {
               Authorization: localStorage.getItem('token'),
             },
@@ -102,7 +102,7 @@
     const handleDeleteProduct = async (index) => {
       try {
         const productId = products[index]._id;
-        await axios.delete(`http://localhost:8080/products/${productId}`, {
+        await axios.delete(`https://tech-trove-api.vercel.app/products/${productId}`, {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
