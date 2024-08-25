@@ -14,11 +14,18 @@ function Home() {
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const popupRef = useRef(null);
+  const sidebarButtonRef = useRef(null);
 
   useEffect(() => {
     setLoggedInUser(localStorage.getItem('loggedInUserName'));
 
     const handleClickOutside = (event) => {
+      if (
+        (sidebarRef.current && !sidebarRef.current.contains(event.target)) &&
+        (sidebarButtonRef.current && !sidebarButtonRef.current.contains(event.target))
+      ) {
+        setSidebarVisible(false);
+      }
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setPopupVisible(false);
       }
@@ -37,7 +44,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://tech-trove-api.vercel.app/products', {
+      const response = await axios.get('http://localhost:8080/products', {
         headers: {
           Authorization: localStorage.getItem('token'),
         },
@@ -61,21 +68,41 @@ function Home() {
     setPopupVisible(!popupVisible);
   };
 
+  const handleSidebarToggle = () => {
+    setSidebarVisible((prevState) => !prevState);
+  };
+
   return (
     <div className='flex min-h-screen bg-gray-900'>
-      <div ref={sidebarRef} className={`fixed left-0 top-0 h-full bg-gray-800 shadow-lg z-50 transform ${sidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300`}>
+      <div
+        ref={sidebarRef}
+        className={`fixed left-0 top-0 h-full bg-teal-600 shadow-lg z-50 transform ${sidebarVisible ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300`}
+        onMouseEnter={() => setSidebarVisible(true)}
+        onMouseLeave={() => setSidebarVisible(false)}
+      >
         <div className='p-4'>
-          <button className='w-full text-left p-2 hover:bg-gray-600 text-white' onClick={() => navigate('/search')}>
+          <button
+            className='w-full text-left p-2 hover:bg-black text-white transition-colors mb-4'
+            onClick={() => navigate('/search')}
+          >
             Search for products
           </button>
-          <button className='w-full text-left p-2 hover:bg-gray-600 text-white' onClick={() => navigate('/profilePage')}>
+          <button
+            className='w-full text-left p-2 hover:bg-black text-white transition-colors'
+            onClick={() => navigate('/profilePage')}
+          >
             Profile
           </button>
         </div>
       </div>
       <div className='flex flex-col items-center w-full'>
         <div className='flex w-full justify-between items-center bg-gray-800 p-4 shadow-md'>
-          <button className='text-3xl text-white' onMouseOver={() => setSidebarVisible(true)}>
+          <button
+            ref={sidebarButtonRef}
+            className='text-3xl text-white'
+            onClick={handleSidebarToggle}
+            onMouseEnter={() => setSidebarVisible(true)}
+          >
             <FontAwesomeIcon icon={faBars} />
           </button>
           <h1 className='text-2xl mb-5 text-white'>{loggedInUser}</h1>
@@ -101,8 +128,7 @@ function Home() {
             )}
           </div>
         </div>
-        
-        {}
+
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4'>
           {products.map((product) => (
             <div key={product._id} className='bg-gray-800 shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300'>
