@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faCamera, faHome } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
@@ -13,7 +14,9 @@ const ProfilePage = () => {
   const [newUsername, setNewUsername] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newAddress, setNewAddress] = useState('');
-  const [newImage, setNewImage] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('loggedInUserName');
@@ -72,28 +75,84 @@ const ProfilePage = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white'>
-      <div className='bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-2xl'>
-        <h1 className='text-2xl font-bold mb-6 text-center'>User Profile</h1>
+      {/* Centered Home Button */}
+      <div className='absolute top-4 left-1/2 transform -translate-x-1/2'>
+        <button
+          onClick={() => navigate('/')}
+          className='text-2xl bg-white text-black border border-black p-2 rounded transition-colors'
+          style={{ width: '3rem', height: '3rem' }} // Square shape
+        >
+          <FontAwesomeIcon icon={faHome} />
+        </button>
+      </div>
 
-        {/* Display User Image */}
-        <div className='mb-6 flex flex-col items-center'>
-          {image && (
-            <img
-              src={image}
-              alt='User Profile'
-              className='w-32 h-32 rounded-full mb-4 object-cover'
-            />
+      <div className='bg-teal-600 p-8 rounded-lg shadow-lg w-full max-w-2xl'>
+        
+        {/* Username with Edit Button */}
+        <div className='flex items-center justify-between mb-6'>
+          {isEditingUsername ? (
+            <>
+              <input
+                type='text'
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                className='text-4xl font-extrabold border border-gray-700 rounded p-2 mr-2 bg-teal-100 text-black flex-grow text-center'
+              />
+              <button
+                onClick={handleSaveUsernameClick}
+                className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+              >
+                <FontAwesomeIcon icon={faSave} />
+              </button>
+            </>
+          ) : (
+            <>
+              <h1 className='text-5xl font-extrabold text-black mr-4'>{username}</h1>
+              <button
+                onClick={handleEditUsernameClick}
+                className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+            </>
           )}
+        </div>
+
+        {/* Centered Profile Picture with Camera Icon */}
+        <div className='mb-6 flex flex-col items-center relative mx-auto' style={{ width: '8rem', height: '8rem' }}>
+          <div
+            className='relative w-full h-full rounded-full overflow-hidden'
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {image && (
+              <img
+                src={image}
+                alt='User Profile'
+                className='w-full h-full object-cover rounded-full'
+              />
+            )}
+            {isHovered && (
+              <label 
+                htmlFor='upload-image'
+                className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full cursor-pointer'
+              >
+                <FontAwesomeIcon icon={faCamera} className='text-white text-2xl' />
+              </label>
+            )}
+          </div>
           <input
             type='file'
+            id='upload-image'
             accept='image/*'
             onChange={handleImageChange}
-            className='text-gray-400 text-sm'
+            className='hidden'
           />
         </div>
 
+        {/* Email with Edit Button */}
         <div className='mb-6'>
-          <label className='block text-gray-400 text-sm font-bold mb-2'>Email:</label>
+          <label className='block text-gray-200 text-xl font-bold mb-2'>Email:</label>
           <div className='flex items-center'>
             {isEditingEmail ? (
               <>
@@ -101,16 +160,22 @@ const ProfilePage = () => {
                   type='text'
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
-                  className='text-lg border border-gray-600 rounded p-2 mr-2 flex-grow bg-gray-700 text-white'
+                  className='text-2xl border border-gray-700 rounded p-2 mr-2 flex-grow bg-teal-100 text-black'
                 />
-                <button onClick={handleSaveEmailClick} className='text-gray-400 hover:text-gray-200'>
+                <button
+                  onClick={handleSaveEmailClick}
+                  className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+                >
                   <FontAwesomeIcon icon={faSave} />
                 </button>
               </>
             ) : (
               <>
-                <p className='text-lg text-gray-300 mr-2'>{email}</p>
-                <button onClick={handleEditEmailClick} className='text-gray-400 hover:text-gray-200'>
+                <p className='text-2xl text-black mr-2'>{email}</p>
+                <button
+                  onClick={handleEditEmailClick}
+                  className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+                >
                   <FontAwesomeIcon icon={faEdit} />
                 </button>
               </>
@@ -118,34 +183,9 @@ const ProfilePage = () => {
           </div>
         </div>
 
+        {/* Address with Edit Button */}
         <div className='mb-6'>
-          <label className='block text-gray-400 text-sm font-bold mb-2'>Username:</label>
-          <div className='flex items-center'>
-            {isEditingUsername ? (
-              <>
-                <input
-                  type='text'
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                  className='text-lg border border-gray-600 rounded p-2 mr-2 flex-grow bg-gray-700 text-white'
-                />
-                <button onClick={handleSaveUsernameClick} className='text-gray-400 hover:text-gray-200'>
-                  <FontAwesomeIcon icon={faSave} />
-                </button>
-              </>
-            ) : (
-              <>
-                <p className='text-lg text-gray-300 mr-2'>{username}</p>
-                <button onClick={handleEditUsernameClick} className='text-gray-400 hover:text-gray-200'>
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className='mb-6'>
-          <label className='block text-gray-400 text-sm font-bold mb-2'>Address:</label>
+          <label className='block text-gray-200 text-xl font-bold mb-2'>Address:</label>
           <div className='flex items-center'>
             {isEditingAddress ? (
               <>
@@ -153,16 +193,22 @@ const ProfilePage = () => {
                   type='text'
                   value={newAddress}
                   onChange={(e) => setNewAddress(e.target.value)}
-                  className='text-lg border border-gray-600 rounded p-2 mr-2 flex-grow bg-gray-700 text-white'
+                  className='text-2xl border border-gray-700 rounded p-2 mr-2 flex-grow bg-teal-100 text-black'
                 />
-                <button onClick={handleSaveAddressClick} className='text-gray-400 hover:text-gray-200'>
+                <button
+                  onClick={handleSaveAddressClick}
+                  className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+                >
                   <FontAwesomeIcon icon={faSave} />
                 </button>
               </>
             ) : (
               <>
-                <p className='text-lg text-gray-300 mr-2'>{address}</p>
-                <button onClick={handleEditAddressClick} className='text-gray-400 hover:text-gray-200'>
+                <p className='text-2xl text-black mr-2'>{address}</p>
+                <button
+                  onClick={handleEditAddressClick}
+                  className='text-white bg-black hover:bg-gray-800 p-2 rounded transition-colors'
+                >
                   <FontAwesomeIcon icon={faEdit} />
                 </button>
               </>
