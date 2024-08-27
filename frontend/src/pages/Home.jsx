@@ -4,7 +4,7 @@ import { handleSuccess } from '../utils';
 import { ToastContainer } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faUser } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import api from '../api';
 
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState('');
@@ -44,11 +44,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://tech-trove-api.vercel.app/products', {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
+      const response = await api.get('/products');
       setProducts(response.data);
     } catch (err) {
       console.error('Error fetching products:', err);
