@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { handleError, handleSuccess } from '../utils';
 import { ToastContainer } from 'react-toastify';
+import api from '../api'; // Import the axios instance
 
 function Login() {
   const [loginInfo, setLoginInfo] = useState({
@@ -10,49 +11,43 @@ function Login() {
   });
 
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const copyLoginInfo = { ...loginInfo };
-    copyLoginInfo[name] = value;
-    setLoginInfo(copyLoginInfo);
+    setLoginInfo({
+      ...loginInfo,
+      [name]: value,
+    });
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const { email, password } = loginInfo;
+
     if (!email || !password) {
       return handleError('Enter email and password');
     }
+
     try {
-      const url = "https://tech-trove-api.vercel.app/auth/login";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(loginInfo)
-      });
-      const result = await response.json();
-      console.log("userdata ",result.user)
-      const { success, message, jwtToken, user, error } = result;
+      const response = await api.post('/auth/login', loginInfo);
+      const { success, message, accessToken, refreshToken, user } = response.data;
+
       if (success) {
         handleSuccess(message);
-        localStorage.setItem('token', jwtToken);
-        localStorage.setItem('loggedInUserEmail', result.user.email); 
-        localStorage.setItem('loggedinUserImage', result.user.image);
-        localStorage.setItem('loggedinUserAddress', result.user.address);
-        localStorage.setItem('loggedInUserName', result.user.name); 
+        localStorage.setItem('token', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('loggedInUserEmail', user.email);
+        localStorage.setItem('loggedInUserName', user.name);
+        localStorage.setItem('loggedinUserImage', user.image);
+        localStorage.setItem('loggedinUserAddress', user.address);
         setTimeout(() => {
           navigate('/home');
         }, 1000);
-      } else if (error) {
-        const details = error?.details[0].message;
-        handleError(details);
-      } else if (!success) {
+      } else {
         handleError(message);
       }
     } catch (err) {
-      handleError(err);
+      handleError(err.response?.data?.message || 'Login failed');
     }
   };
 

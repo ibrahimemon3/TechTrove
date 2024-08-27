@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faCamera, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api'; // Import the Axios instance
 import Table from './Table';
 
 const SearchForm = () => {
@@ -25,11 +25,7 @@ const SearchForm = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://tech-trove-api.vercel.app/products', {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
+      const response = await api.get('/products'); // Use the api instance
       setProducts(response.data);
     } catch (err) {
       console.error('Error fetching products:', err);
@@ -69,21 +65,13 @@ const SearchForm = () => {
     try {
       if (editIndex !== null) {
         const updatedProduct = { ...filters };
-        const response = await axios.put(`https://tech-trove-api.vercel.app/products/${products[editIndex]._id}`, updatedProduct, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
+        const response = await api.put(`/products/${products[editIndex]._id}`, updatedProduct); // Use the api instance
         const updatedProducts = [...products];
         updatedProducts[editIndex] = response.data.product;
         setProducts(updatedProducts);
         setEditIndex(null);
       } else {
-        const response = await axios.post('https://tech-trove-api.vercel.app/products', filters, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        });
+        const response = await api.post('/products', filters); // Use the api instance
         setProducts([...products, response.data.product]);
       }
       setFilters({
@@ -107,11 +95,7 @@ const SearchForm = () => {
   const handleDeleteProduct = async (index) => {
     try {
       const productId = products[index]._id;
-      await axios.delete(`https://tech-trove-api.vercel.app/products/${productId}`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      });
+      await api.delete(`/products/${productId}`); // Use the api instance
       const updatedProducts = products.filter((_, i) => i !== index);
       setProducts(updatedProducts);
     } catch (err) {
