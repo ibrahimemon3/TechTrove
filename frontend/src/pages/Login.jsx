@@ -40,6 +40,7 @@ function Login() {
         localStorage.setItem('loggedInUserName', user.name);
         localStorage.setItem('loggedinUserImage', user.image);
         localStorage.setItem('loggedinUserAddress', user.address);
+        localStorage.setItem('loggedinUserAdmin', user.admin);
         setTimeout(() => {
           navigate('/home');
         }, 1000);
