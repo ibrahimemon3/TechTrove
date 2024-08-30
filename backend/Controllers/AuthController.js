@@ -39,7 +39,8 @@ const signup = async (req, res) => {
             email, 
             password, 
             image, 
-            address 
+            address,
+            admin: false 
         });
 
        

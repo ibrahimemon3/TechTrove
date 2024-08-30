@@ -21,6 +21,10 @@ const UserSchema = new Schema({
     },
     address: {
         type: String,
+        required: true, // Address stored as a single string
+    },
+    admin: {
+        type: Boolean,
         required: false, // Address stored as a single string
     }
 });
