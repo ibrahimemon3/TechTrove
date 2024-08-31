@@ -86,7 +86,7 @@ const ProfilePage = () => {
         </button>
       </div>
 
-      <div className='bg-teal-600 p-8 rounded-lg shadow-lg w-full max-w-2xl'>
+      <div className='bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-2xl'>
         
         {/* Username with Edit Button */}
         <div className='flex items-center justify-between mb-6'>
@@ -150,10 +150,10 @@ const ProfilePage = () => {
           />
         </div>
 
-        {/* Email with Edit Button */}
+        {/* Email with Label and Edit Button */}
         <div className='mb-6'>
-          <label className='block text-gray-200 text-xl font-bold mb-2'>Email:</label>
           <div className='flex items-center'>
+            <span className='text-2xl font-bold text-black mr-2'>Email:</span>
             {isEditingEmail ? (
               <>
                 <input
@@ -183,10 +183,10 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Address with Edit Button */}
+        {/* Address with Label and Edit Button */}
         <div className='mb-6'>
-          <label className='block text-gray-200 text-xl font-bold mb-2'>Address:</label>
           <div className='flex items-center'>
+            <span className='text-2xl font-bold text-black mr-2'>Address:</span>
             {isEditingAddress ? (
               <>
                 <input
