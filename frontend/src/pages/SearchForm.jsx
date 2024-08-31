@@ -1,25 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faSave,
-  faCamera,
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // Import the Axios instance
+import api from "../api";
 import Table from "./Table";
 
 const SearchForm = () => {
   const storedAdmin = localStorage.getItem("loggedinUserAdmin");
-  console.log("storedAdmin", storedAdmin);
   const [admin, setAdmin] = useState(false);
-  useEffect(() => {
-    if (storedAdmin === "true") {
-      setAdmin(true);
-    }
-  }, []);
-  console.log("admin", admin);
   const [filters, setFilters] = useState({
     category: "",
     productName: "",
@@ -34,12 +22,15 @@ const SearchForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (storedAdmin === "true") {
+      setAdmin(true);
+    }
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get("/products"); // Use the api instance
+      const response = await api.get("/products");
       setProducts(response.data);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -82,22 +73,16 @@ const SearchForm = () => {
         const response = await api.put(
           `/products/${products[editIndex]._id}`,
           updatedProduct
-        ); // Use the api instance
+        );
         const updatedProducts = [...products];
         updatedProducts[editIndex] = response.data.product;
         setProducts(updatedProducts);
         setEditIndex(null);
       } else {
-        const response = await api.post("/products", filters); // Use the api instance
+        const response = await api.post("/products", filters);
         setProducts([...products, response.data.product]);
       }
-      setFilters({
-        category: "",
-        productName: "",
-        price: "",
-        brand: "",
-        image: "",
-      });
+      resetFilters();
     } catch (err) {
       console.error("Error adding/updating product:", err);
     }
@@ -112,12 +97,28 @@ const SearchForm = () => {
   const handleDeleteProduct = async (index) => {
     try {
       const productId = products[index]._id;
-      await api.delete(`/products/${productId}`); // Use the api instance
+      await api.delete(`/products/${productId}`);
       const updatedProducts = products.filter((_, i) => i !== index);
       setProducts(updatedProducts);
     } catch (err) {
       console.error("Error deleting product:", err);
     }
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      category: "",
+      productName: "",
+      price: "",
+      brand: "",
+      image: "",
+    });
+    setSearchResults([]);
+  };
+
+  const handleReset = () => {
+    resetFilters();
+    fetchProducts();
   };
 
   return (
@@ -127,17 +128,16 @@ const SearchForm = () => {
         <button
           onClick={() => navigate("/")}
           className="text-2xl bg-white text-black border border-black p-2 rounded transition-colors"
-          style={{ width: "3rem", height: "3rem" }} // Square shape
+          style={{ width: "3rem", height: "3rem" }}
         >
           <FontAwesomeIcon icon={faHome} />
         </button>
       </div>
 
-      {/* Space between Home button and search form */}
-      <div className="mt-24 w-full">
+      <div className="mt-24 w-full max-w-screen-xl">
         <form
           onSubmit={handleFormSubmit}
-          className="flex flex-col lg:flex-row items-center gap-4 bg-gray-800 p-12 rounded-lg shadow-lg w-full max-w-screen-xl"
+          className="flex flex-col lg:flex-row items-center gap-4 bg-gray-800 p-12 rounded-lg shadow-lg w-full"
         >
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-4 mb-4 flex-wrap justify-center">
@@ -170,7 +170,7 @@ const SearchForm = () => {
               placeholder="Product Name"
               value={filters.productName}
               onChange={handleInputChange}
-              className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+              className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
             />
             <input
               type="number"
@@ -178,7 +178,7 @@ const SearchForm = () => {
               placeholder="Price"
               value={filters.price}
               onChange={handleInputChange}
-              className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+              className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
             />
             <input
               type="text"
@@ -186,17 +186,17 @@ const SearchForm = () => {
               placeholder="Brand"
               value={filters.brand}
               onChange={handleInputChange}
-              className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+              className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
             />
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full lg:w-80 mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
+              className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
             />
           </div>
           <div className="flex flex-col gap-2">
-            {admin ? (
+            {admin && (
               <button
                 type="button"
                 onClick={handleAddProduct}
@@ -204,15 +204,19 @@ const SearchForm = () => {
               >
                 {editIndex !== null ? "Update" : "Add"} Product
               </button>
-            ) : (
-              <div></div>
             )}
-
             <button
               type="submit"
               className="w-full lg:w-auto p-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
             >
               Search
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="w-full lg:w-auto p-2 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
+            >
+              Reset
             </button>
           </div>
         </form>
