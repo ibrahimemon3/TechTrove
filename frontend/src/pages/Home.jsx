@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
+import 'typeface-audiowide'; // Ensure Audiowide is imported
 
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -81,7 +82,7 @@ function Home() {
     <div className="flex min-h-screen bg-gray-900">
       <div
         ref={sidebarRef}
-        className={`fixed left-0 top-0 h-full bg-blue-900 shadow-lg z-50 transform ${
+        className={`fixed left-0 top-0 h-full bg-gradient-to-b from-navy-900 to-black shadow-lg z-50 transform ${
           sidebarVisible ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300`}
         onMouseEnter={() => setSidebarVisible(true)}
@@ -114,7 +115,7 @@ function Home() {
             <FontAwesomeIcon icon={faBars} />
           </button>
           <div className="flex items-center flex-grow justify-center">
-            <h1 className="text-2xl mb-5 text-white">{loggedInUser}</h1>
+            <h1 className="text-4xl font-audiowide text-white mb-5">{loggedInUser}</h1>
           </div>
           <div className="flex items-center">
             {!isAdmin && ( // Conditionally render cart button for non-admin users

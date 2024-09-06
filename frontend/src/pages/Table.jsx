@@ -2,15 +2,39 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
-const Table = ({ products, onEdit, onDelete, onAddToCart }) => {
+const Table = ({ products, onEdit, onDelete }) => {
   const storedAdmin = localStorage.getItem("loggedinUserAdmin");
   const [admin, setAdmin] = useState(false);
+  const [flashedProductId, setFlashedProductId] = useState(null);
 
   useEffect(() => {
     if (storedAdmin === "true") {
       setAdmin(true);
     }
   }, [storedAdmin]);
+
+  const onAddToCart = (product) => {
+    // Get existing cart from local storage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // Check if the product already exists in the cart
+    const existingProductIndex = cart.findIndex(item => item._id === product._id);
+    
+    if (existingProductIndex > -1) {
+      // Product exists, increase its quantity
+      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
+    } else {
+      // Product does not exist, add it to the cart with quantity 1
+      cart.push({ ...product, quantity: 1 });
+    }
+    
+    // Save updated cart to local storage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Flash the button
+    setFlashedProductId(product._id);
+    setTimeout(() => setFlashedProductId(null), 150); // Flash for 150ms
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -26,7 +50,7 @@ const Table = ({ products, onEdit, onDelete, onAddToCart }) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
+          {products.map((product) => (
             <tr key={product._id}>
               <td className="py-3 px-4 border-b border-gray-700">
                 {product.image ? (
@@ -55,8 +79,9 @@ const Table = ({ products, onEdit, onDelete, onAddToCart }) => {
                 <div className="flex justify-center gap-2">
                   {!admin && (
                     <button
-                      onClick={() => onAddToCart(index)}
-                      className="flex items-center justify-center w-16 h-8 bg-green-500 hover:bg-green-600 rounded-md text-white shadow-md transition-transform transform hover:scale-105"
+                      onClick={() => onAddToCart(product)}
+                      className={`flex items-center justify-center w-16 h-8 rounded-md text-white shadow-md transition-transform transform hover:scale-105 ${flashedProductId === product._id ? 'bg-white text-black' : 'bg-green-500 hover:bg-green-600'}`}
+                      style={{ transition: 'background-color 0.2s ease' }}
                     >
                       <FontAwesomeIcon icon={faCartPlus} />
                     </button>
@@ -64,13 +89,13 @@ const Table = ({ products, onEdit, onDelete, onAddToCart }) => {
                   {admin && (
                     <>
                       <button
-                        onClick={() => onEdit(index)}
+                        onClick={() => onEdit(product._id)}
                         className="flex items-center justify-center w-16 h-8 bg-blue-500 hover:bg-blue-600 rounded-md text-white shadow-md transition-transform transform hover:scale-105"
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button
-                        onClick={() => onDelete(index)}
+                        onClick={() => onDelete(product._id)}
                         className="flex items-center justify-center w-16 h-8 bg-red-500 hover:bg-red-600 rounded-md text-white shadow-md transition-transform transform hover:scale-105"
                       >
                         <FontAwesomeIcon icon={faTrash} />
