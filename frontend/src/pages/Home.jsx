@@ -19,12 +19,11 @@ function Home() {
   const sidebarButtonRef = useRef(null);
 
   useEffect(() => {
-    // Get admin status and user info
     const loggedInUserName = localStorage.getItem("loggedInUserName");
     const loggedInUserAdmin = localStorage.getItem("loggedinUserAdmin");
     
     setLoggedInUser(loggedInUserName);
-    setIsAdmin(loggedInUserAdmin === "true"); // Set admin status based on localStorage
+    setIsAdmin(loggedInUserAdmin === "true");
     
     const handleClickOutside = (event) => {
       if (
@@ -63,7 +62,7 @@ function Home() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("loggedInUser");
-    localStorage.removeItem("loggedinUserAdmin"); // Ensure admin status is removed
+    localStorage.removeItem("loggedinUserAdmin");
     handleSuccess("User Logged out");
     setTimeout(() => {
       navigate("/login");
@@ -121,7 +120,7 @@ function Home() {
             {!isAdmin && ( // Conditionally render cart button for non-admin users
               <button
                 onClick={() => navigate("/cart")}
-                className="text-2xl text-white mr-4" // Adjusted margin-right for the Shopping Cart button
+                className="text-2xl text-white mr-4"
               >
                 <FontAwesomeIcon icon={faShoppingCart} />
               </button>
@@ -129,7 +128,7 @@ function Home() {
             <div className="relative">
               <button
                 onClick={togglePopup}
-                className="text-2xl focus:outline-none text-white ml-4" // Adjusted margin-left for the User button
+                className="text-2xl focus:outline-none text-white ml-4"
               >
                 <FontAwesomeIcon icon={faUser} />
               </button>
@@ -150,16 +149,17 @@ function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-6 p-4">
           {products.map((product) => (
             <div
               key={product._id}
-              className="bg-gray-800 shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300"
+              className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-48 mx-auto transform hover:scale-105 transition-transform duration-300"
             >
               <img
                 src={product.image}
                 alt={product.productName}
-                className="w-full h-48 object-cover"
+                className="w-full h-full object-cover"
+                style={{ height: "12rem", width: "12rem" }} // Square images
               />
               <div className="p-4 text-center">
                 <h3 className="text-lg font-semibold text-white">

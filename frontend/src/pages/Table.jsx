@@ -50,7 +50,7 @@ const Table = ({ products, onEdit, onDelete }) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+        {products.map((product, index) => (
             <tr key={product._id}>
               <td className="py-3 px-4 border-b border-gray-700">
                 {product.image ? (
@@ -89,13 +89,13 @@ const Table = ({ products, onEdit, onDelete }) => {
                   {admin && (
                     <>
                       <button
-                        onClick={() => onEdit(product._id)}
+                        onClick={() => onEdit(index)}
                         className="flex items-center justify-center w-16 h-8 bg-blue-500 hover:bg-blue-600 rounded-md text-white shadow-md transition-transform transform hover:scale-105"
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       <button
-                        onClick={() => onDelete(product._id)}
+                        onClick={() => onDelete(index)}
                         className="flex items-center justify-center w-16 h-8 bg-red-500 hover:bg-red-600 rounded-md text-white shadow-md transition-transform transform hover:scale-105"
                       >
                         <FontAwesomeIcon icon={faTrash} />
