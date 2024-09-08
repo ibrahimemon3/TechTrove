@@ -5,7 +5,7 @@ const ProductModel = require('../Models/Product');
 // Create Product with Image
 router.post('/', ensureAuthenticated, async (req, res) => {
     try {
-        const { category, productName, price, brand, image } = req.body;
+        const { category, productName, price, brand, image, description } = req.body;  // Include description
 
         const product = new ProductModel({
             category,
@@ -13,6 +13,7 @@ router.post('/', ensureAuthenticated, async (req, res) => {
             price,
             brand,
             image, // Store the base64-encoded image
+            description, // Save the description
         });
 
         await product.save();
@@ -25,10 +26,10 @@ router.post('/', ensureAuthenticated, async (req, res) => {
 // Update Product with Image
 router.put('/:id', ensureAuthenticated, async (req, res) => {
     try {
-        const { category, productName, price, brand, image } = req.body;
+        const { category, productName, price, brand, image, description } = req.body; // Include description
         const product = await ProductModel.findByIdAndUpdate(
             req.params.id,
-            { category, productName, price, brand, image },
+            { category, productName, price, brand, image, description },  // Update description
             { new: true }
         );
 
@@ -63,5 +64,19 @@ router.delete('/:id', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ message: 'Internal server error', err });
     }
 });
+
+// Add this in ProductRouter.js
+router.get('/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const product = await ProductModel.findById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      res.status(200).json(product);
+    } catch (err) {
+      res.status(500).json({ message: 'Internal server error', err });
+    }
+  });
+  
 
 module.exports = router;

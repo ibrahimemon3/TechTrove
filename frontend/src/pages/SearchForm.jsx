@@ -14,6 +14,7 @@ const SearchForm = () => {
     price: "",
     brand: "",
     image: "",
+    description: "", // New field for description
   });
   const [products, setProducts] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
@@ -112,6 +113,7 @@ const SearchForm = () => {
       price: "",
       brand: "",
       image: "",
+      description: "",  // Reset description
     });
     setSearchResults([]);
   };
@@ -190,41 +192,52 @@ const SearchForm = () => {
             />
             <input
               type="file"
-              accept="image/*"
+              name="image"
               onChange={handleImageChange}
               className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
             />
+            <textarea
+              name="description"
+              placeholder="Product Description"
+              value={filters.description}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+            />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col w-full lg:w-auto">
+            <button
+              type="submit"
+              className="bg-gray-200 text-gray-900 px-4 py-2 mb-2 rounded transition-colors hover:bg-gray-400"
+            >
+              Search
+            </button>
             {admin && (
               <button
                 type="button"
                 onClick={handleAddProduct}
-                className="w-full lg:w-auto p-2 bg-gradient-to-br from-yellow-500 to-orange-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
+                className="bg-green-500 text-gray-200 px-4 py-2 rounded transition-colors hover:bg-green-600"
               >
-                {editIndex !== null ? "Update" : "Add"} Product
+                {editIndex !== null ? "Update Product" : "Add Product"}
               </button>
             )}
-            <button
-              type="submit"
-              className="w-full lg:w-auto p-2 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
-            >
-              Search
-            </button>
-            <button
-              type="button"
-              onClick={handleReset}
-              className="w-full lg:w-auto p-2 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-md shadow-md hover:shadow-lg transform transition duration-300 hover:scale-105"
-            >
-              Reset
-            </button>
           </div>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="bg-red-500 text-gray-200 px-4 py-2 rounded transition-colors hover:bg-red-600"
+          >
+            Reset
+          </button>
         </form>
+
+        {/* Search Results Table */}
         <Table
-          products={searchResults.length > 0 ? searchResults : products}
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
-        />
+         products={products}
+         onEdit={handleEditProduct}
+         onDelete={handleDeleteProduct}
+         admin={admin}
+       />
+
       </div>
     </div>
   );
