@@ -7,6 +7,7 @@ import RefrshHandler from './RefrshHandler';
 import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
 import Cart from './pages/Cart'; // Import the Cart component
+import ProductDetails from './pages/ProductDetails';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,6 +27,7 @@ function App() {
         <Route path='/profilePage' element={<ProfilePage />} />
         <Route path='/cart' element={<PrivateRoute element={<Cart />} />} /> {/* Add the Cart route */}
         <Route path='/home' element={<PrivateRoute element={<Home />} />} />
+        <Route path='/products/:productId' element={<PrivateRoute element={<ProductDetails />} />} />
       </Routes>
     </div>
   );

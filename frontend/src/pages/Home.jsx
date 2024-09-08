@@ -5,14 +5,16 @@ import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faUser, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
-import 'typeface-audiowide'; // Ensure Audiowide is imported
+import 'typeface-audiowide';
 
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
   const [products, setProducts] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false); // Add state to check if user is admin
+  const [cartCount, setCartCount] = useState(0); // State for tracking cart count
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [flashedProductId, setFlashedProductId] = useState(null);
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const popupRef = useRef(null);
@@ -21,10 +23,13 @@ function Home() {
   useEffect(() => {
     const loggedInUserName = localStorage.getItem("loggedInUserName");
     const loggedInUserAdmin = localStorage.getItem("loggedinUserAdmin");
-    
+
     setLoggedInUser(loggedInUserName);
     setIsAdmin(loggedInUserAdmin === "true");
-    
+
+    // Get cart count from localStorage when the component mounts
+    updateCartCount();
+
     const handleClickOutside = (event) => {
       if (
         sidebarRef.current &&
@@ -77,6 +82,34 @@ function Home() {
     setSidebarVisible((prevState) => !prevState);
   };
 
+  // Function to update cart count based on the cart in localStorage
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const count = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
+    setCartCount(count);
+  };
+
+  const onAddToCart = (product) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const existingProductIndex = cart.findIndex((item) => item._id === product._id);
+
+    if (existingProductIndex > -1) {
+      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Update cart count after adding to cart
+    updateCartCount();
+
+    // Flash the button briefly
+    setFlashedProductId(product._id);
+    setTimeout(() => setFlashedProductId(null), 150);
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-900">
       <div
@@ -117,12 +150,17 @@ function Home() {
             <h1 className="text-4xl font-audiowide text-white mb-5">{loggedInUser}</h1>
           </div>
           <div className="flex items-center">
-            {!isAdmin && ( // Conditionally render cart button for non-admin users
+            {!isAdmin && (
               <button
                 onClick={() => navigate("/cart")}
-                className="text-2xl text-white mr-4"
+                className="text-2xl text-white mr-4 relative"
               >
                 <FontAwesomeIcon icon={faShoppingCart} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 text-xs">
+                    {cartCount}
+                  </span>
+                )}
               </button>
             )}
             <div className="relative">
@@ -153,21 +191,32 @@ function Home() {
           {products.map((product) => (
             <div
               key={product._id}
-              className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-48 mx-auto transform hover:scale-105 transition-transform duration-300"
+              onClick={() => navigate(`/products/${product._id}`)}
+              className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full mx-auto transform hover:scale-105 transition-transform duration-300 cursor-pointer relative"
+              style={{ height: '24rem' }}
             >
               <img
                 src={product.image}
                 alt={product.productName}
-                className="w-full h-full object-cover"
-                style={{ height: "12rem", width: "12rem" }} // Square images
+                className="w-full h-48 object-cover"
               />
               <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-white mb-2">
                   {product.productName}
                 </h3>
                 <p className="text-gray-400 mb-4">${product.price}</p>
-                <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-                  Buy Now
+              </div>
+              <div className="p-4 text-center absolute bottom-0 w-full">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddToCart(product);
+                  }}
+                  className={`bg-blue-600 text-white py-2 px-4 rounded w-full hover:bg-blue-700 transition-colors ${
+                    flashedProductId === product._id ? "bg-green-500" : ""
+                  }`}
+                >
+                  Add To Cart
                 </button>
               </div>
             </div>
