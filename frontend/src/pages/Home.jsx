@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faUser, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
 import 'typeface-audiowide';
 
@@ -12,9 +12,11 @@ function Home() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
   const [products, setProducts] = useState([]);
-  const [cartCount, setCartCount] = useState(0); // State for tracking cart count
+  const [cartCount, setCartCount] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [flashedProductId, setFlashedProductId] = useState(null);
+  const [profileImage, setProfileImage] = useState(''); // For the profile image
+  
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const popupRef = useRef(null);
@@ -23,11 +25,12 @@ function Home() {
   useEffect(() => {
     const loggedInUserName = localStorage.getItem("loggedInUserName");
     const loggedInUserAdmin = localStorage.getItem("loggedinUserAdmin");
+    const storedImage = localStorage.getItem("loggedinUserImage"); // Fetch profile image from localStorage
 
     setLoggedInUser(loggedInUserName);
     setIsAdmin(loggedInUserAdmin === "true");
+    setProfileImage(storedImage); // Set profile image state
 
-    // Get cart count from localStorage when the component mounts
     updateCartCount();
 
     const handleClickOutside = (event) => {
@@ -82,7 +85,6 @@ function Home() {
     setSidebarVisible((prevState) => !prevState);
   };
 
-  // Function to update cart count based on the cart in localStorage
   const updateCartCount = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const count = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
@@ -101,11 +103,7 @@ function Home() {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-
-    // Update cart count after adding to cart
     updateCartCount();
-
-    // Flash the button briefly
     setFlashedProductId(product._id);
     setTimeout(() => setFlashedProductId(null), 150);
   };
@@ -146,9 +144,6 @@ function Home() {
           >
             <FontAwesomeIcon icon={faBars} />
           </button>
-          <div className="flex items-center flex-grow justify-center">
-            <h1 className="text-4xl font-audiowide text-white mb-5">{loggedInUser}</h1>
-          </div>
           <div className="flex items-center">
             {!isAdmin && (
               <button
@@ -163,24 +158,49 @@ function Home() {
                 )}
               </button>
             )}
-            <div className="relative">
+            <div className="relative flex items-center">
+              {/* Profile Image Button */}
               <button
                 onClick={togglePopup}
-                className="text-2xl focus:outline-none text-white ml-4"
+                className="focus:outline-none ml-4"
               >
-                <FontAwesomeIcon icon={faUser} />
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                    <span className="text-white text-lg">?</span>
+                  </div>
+                )}
               </button>
+
               {popupVisible && (
                 <div
                   ref={popupRef}
-                  className="absolute right-0 mt-2 w-64 h-32 bg-gray-700 border rounded-lg shadow-lg z-50 flex flex-col items-center justify-center"
+                  className="absolute right-0 mt-2 w-64 bg-gray-800 border border-gray-600 rounded-lg shadow-xl z-50 p-4"
+                  style={{ top: "3rem" }}
                 >
-                  <button
-                    onClick={handleLogout}
-                    className="block w-3/4 text-center px-4 py-2 text-gray-300 hover:bg-gray-600"
-                  >
-                    Logout
-                  </button>
+                  <div className="flex flex-col items-center">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-16 h-16 rounded-full mb-2"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={faUser} className="text-4xl text-gray-400 mb-2" />
+                    )}
+                    <span className="text-white text-lg mb-2">{loggedInUser}</span>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                    >
+                      Logout
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -212,19 +232,19 @@ function Home() {
                     e.stopPropagation();
                     onAddToCart(product);
                   }}
-                  className={`bg-blue-600 text-white py-2 px-4 rounded w-full hover:bg-blue-700 transition-colors ${
-                    flashedProductId === product._id ? "bg-green-500" : ""
+                  className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
+                    flashedProductId === product._id ? "flash-animation" : ""
                   }`}
                 >
-                  Add To Cart
+                  Add to Cart
                 </button>
               </div>
             </div>
           ))}
         </div>
-
-        <ToastContainer />
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
