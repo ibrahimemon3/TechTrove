@@ -190,19 +190,25 @@ const SearchForm = () => {
               onChange={handleInputChange}
               className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
             />
-            <input
-              type="file"
-              name="image"
-              onChange={handleImageChange}
-              className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
-            />
-            <textarea
-              name="description"
-              placeholder="Product Description"
-              value={filters.description}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
-            />
+
+            {/* Conditional rendering for admin fields */}
+            {admin && (
+              <>
+                <input
+                  type="file"
+                  name="image"
+                  onChange={handleImageChange}
+                  className="w-full mb-2 p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200"
+                />
+                <textarea
+                  name="description"
+                  placeholder="Product Description"
+                  value={filters.description}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+                />
+              </>
+            )}
           </div>
           <div className="flex flex-col w-full lg:w-auto">
             <button
