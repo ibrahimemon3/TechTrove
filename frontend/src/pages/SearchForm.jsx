@@ -33,6 +33,7 @@ const SearchForm = () => {
     try {
       const response = await api.get("/products");
       setProducts(response.data);
+      setSearchResults(response.data); // Initialize search results with all products
     } catch (err) {
       console.error("Error fetching products:", err);
     }
@@ -60,8 +61,14 @@ const SearchForm = () => {
     const results = products.filter((product) => {
       return Object.keys(filters).every((key) => {
         if (!filters[key]) return true;
-        if (key === "price") return product[key] === filters[key];
-        return product[key].toLowerCase().includes(filters[key].toLowerCase());
+        if (key === "price") {
+          // Handle price comparison (convert to string for comparison)
+          return product[key] === Number(filters[key]);
+        }
+        return product[key]
+          .toString()
+          .toLowerCase()
+          .includes(filters[key].toLowerCase());
       });
     });
     setSearchResults(results);
@@ -101,6 +108,7 @@ const SearchForm = () => {
       await api.delete(`/products/${productId}`);
       const updatedProducts = products.filter((_, i) => i !== index);
       setProducts(updatedProducts);
+      setSearchResults(updatedProducts); // Update the search results after deletion
     } catch (err) {
       console.error("Error deleting product:", err);
     }
@@ -113,9 +121,9 @@ const SearchForm = () => {
       price: "",
       brand: "",
       image: "",
-      description: "",  // Reset description
+      description: "", // Reset description
     });
-    setSearchResults([]);
+    setSearchResults(products); // Reset search results to all products
   };
 
   const handleReset = () => {
@@ -143,28 +151,21 @@ const SearchForm = () => {
         >
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-4 mb-4 flex-wrap justify-center">
-              {[
-                "Gaming Gear",
-                "Phones and Tablets",
-                "Accessories",
-                "Camera",
-                "Gadgets",
-              ].map((category) => (
-                <label
-                  key={category}
-                  className="flex items-center text-gray-200"
-                >
-                  <input
-                    type="radio"
-                    name="category"
-                    value={category}
-                    checked={filters.category === category}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  {category}
-                </label>
-              ))}
+              {["Gaming Gear", "Phones and Tablets", "Accessories", "Camera", "Gadgets"].map(
+                (category) => (
+                  <label key={category} className="flex items-center text-gray-200">
+                    <input
+                      type="radio"
+                      name="category"
+                      value={category}
+                      checked={filters.category === category}
+                      onChange={handleInputChange}
+                      className="mr-2"
+                    />
+                    {category}
+                  </label>
+                )
+              )}
             </div>
             <input
               type="text"
@@ -238,12 +239,11 @@ const SearchForm = () => {
 
         {/* Search Results Table */}
         <Table
-         products={products}
+         products={searchResults} // Use searchResults for displaying
          onEdit={handleEditProduct}
          onDelete={handleDeleteProduct}
          admin={admin}
        />
-
       </div>
     </div>
   );
