@@ -127,7 +127,10 @@ function Cart() {
         >
           Clear Cart
         </button>
-        <button className="bg-white text-black py-2 px-6 rounded-lg shadow-md font-bold hover:bg-gray-200 transition-colors">
+        <button
+          onClick={() => navigate('/payment')} // Navigate to payment page
+          className="bg-white text-black py-2 px-6 rounded-lg shadow-md font-bold hover:bg-gray-200 transition-colors"
+        >
           Proceed to Checkout
         </button>
       </div>
