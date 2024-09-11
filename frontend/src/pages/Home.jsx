@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
 import 'typeface-audiowide';
 
@@ -144,6 +144,10 @@ function Home() {
           >
             <FontAwesomeIcon icon={faBars} />
           </button>
+
+          {/* Tech Trove Logo in Audiowide Font with Right Margin Adjustment */}
+          <h1 className="text-4xl font-audiowide text-white ml-8">Tech Trove</h1>
+
           <div className="flex items-center">
             {!isAdmin && (
               <button
@@ -226,19 +230,21 @@ function Home() {
                 </h3>
                 <p className="text-gray-400 mb-4">${product.price}</p>
               </div>
-              <div className="p-4 text-center absolute bottom-0 w-full">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onAddToCart(product);
-                  }}
-                  className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
-                    flashedProductId === product._id ? "flash-animation" : ""
-                  }`}
-                >
-                  Add to Cart
-                </button>
-              </div>
+              {!isAdmin && ( // Show the "Add to Cart" button only for non-admin users
+                <div className="p-4 text-center absolute bottom-0 w-full">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToCart(product);
+                    }}
+                    className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
+                      flashedProductId === product._id ? "flash-animation" : ""
+                    }`}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

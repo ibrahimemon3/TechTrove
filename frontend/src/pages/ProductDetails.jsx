@@ -9,11 +9,14 @@ function ProductDetails() {
   const navigate = useNavigate();
   const [flashedProductId, setFlashedProductId] = useState(null); // Add flashedProductId state for button flash effect
   const [cartCount, setCartCount] = useState(0); // Add cart count state
+  const [isAdmin, setIsAdmin] = useState(false); // Add state for admin check
 
   useEffect(() => {
     fetchProductDetails();
     fetchRelatedProducts();
     updateCartCount(); // Update the cart count when the page loads
+    const loggedInUserAdmin = localStorage.getItem("loggedinUserAdmin");
+    setIsAdmin(loggedInUserAdmin === "true"); // Check if the user is admin
   }, []);
 
   const fetchProductDetails = async () => {
@@ -41,15 +44,15 @@ function ProductDetails() {
   };
 
   // Add to Cart functionality
-  const onAddToCart = (product) => {
+  const onAddToCart = (product, quantity = 1) => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     const existingProductIndex = cart.findIndex((item) => item._id === product._id);
 
     if (existingProductIndex > -1) {
-      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
+      cart[existingProductIndex].quantity += quantity;
     } else {
-      cart.push({ ...product, quantity: 1 });
+      cart.push({ ...product, quantity });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -63,7 +66,10 @@ function ProductDetails() {
   };
 
   const handleBuyNow = () => {
-    navigate('/checkout');
+    if (product) {
+      onAddToCart(product); // Add the product to the cart with a quantity of 1
+      navigate('/cart'); // Navigate to the cart page
+    }
   };
 
   if (!product) {
@@ -89,24 +95,24 @@ function ProductDetails() {
             <p className="text-xl text-gray-400 leading-relaxed max-w-3xl mb-10">
               {product.description}
             </p>
-            <div className="flex space-x-6">
-              {/* Add to Cart Button */}
-              <button
-                onClick={() => onAddToCart(product)} // Use onAddToCart function
-                className={`bg-blue-600 py-3 px-8 rounded-full text-white font-semibold hover:bg-blue-700 transition-all ${
-                  flashedProductId === product._id ? "bg-green-500" : ""
-                }`}
-              >
-                Add to Cart
-              </button>
-              {/* Buy Now Button */}
-              <button
-                onClick={handleBuyNow}
-                className="bg-green-600 py-3 px-8 rounded-full text-white font-semibold hover:bg-green-700 transition-all"
-              >
-                Buy Now
-              </button>
-            </div>
+            {!isAdmin && ( // Show buttons only if user is not an admin
+              <div className="flex space-x-6">
+                {/* Add to Cart Button */}
+                <button
+                  onClick={() => onAddToCart(product)} // Use onAddToCart function
+                  className={`bg-blue-600 py-3 px-8 rounded-full text-white font-semibold hover:bg-blue-700 transition-all ${flashedProductId === product._id ? "bg-green-500" : ""}`}
+                >
+                  Add to Cart
+                </button>
+                {/* Buy Now Button */}
+                <button
+                  onClick={handleBuyNow}
+                  className="bg-green-600 py-3 px-8 rounded-full text-white font-semibold hover:bg-green-700 transition-all"
+                >
+                  Buy Now
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

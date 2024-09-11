@@ -6,8 +6,9 @@ import Login from './pages/Login';
 import RefrshHandler from './RefrshHandler';
 import SearchPage from './pages/SearchPage';
 import ProfilePage from './pages/ProfilePage';
-import Cart from './pages/Cart'; // Import the Cart component
+import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
+import Payment from './pages/PaymentPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,17 +18,18 @@ function App() {
   };
 
   return (
-    <div className='App'>
+    <div className="App">
       <RefrshHandler setIsAuthenticated={setIsAuthenticated} />
       <Routes>
-        <Route path='/' element={<Navigate to="/login" />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/search' element={<SearchPage />} />
-        <Route path='/profilePage' element={<ProfilePage />} />
-        <Route path='/cart' element={<PrivateRoute element={<Cart />} />} /> {/* Add the Cart route */}
-        <Route path='/home' element={<PrivateRoute element={<Home />} />} />
-        <Route path='/products/:productId' element={<PrivateRoute element={<ProductDetails />} />} />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/profilePage" element={<PrivateRoute element={<ProfilePage />} />} />
+        <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
+        <Route path="/payment" element={<PrivateRoute element={<Payment />} />} />
+        <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+        <Route path="/products/:productId" element={<PrivateRoute element={<ProductDetails />} />} />
       </Routes>
     </div>
   );
