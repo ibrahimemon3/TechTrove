@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faCamera, faHome } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import 'typeface-audiowide'; // Import Audiowide font
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
@@ -86,8 +87,12 @@ const ProfilePage = () => {
         </button>
       </div>
 
+      {/* "Your Profile" Text */}
+      <div className="absolute top-4 left-4">
+        <h2 className="text-3xl font-audiowide text-white">Your Profile</h2>
+      </div>
+
       <div className='bg-gray-200 p-8 rounded-lg shadow-lg w-full max-w-2xl'>
-        
         {/* Username with Edit Button */}
         <div className='flex items-center justify-between mb-6'>
           {isEditingUsername ? (

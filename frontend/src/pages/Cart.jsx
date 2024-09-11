@@ -54,6 +54,11 @@ function Cart() {
       : {};
   };
 
+  const handleProceedToCheckout = () => {
+    handleClearCart(); // Clear the cart
+    navigate('/payment'); // Navigate to payment page
+  };
+
   return (
     <div className="p-6 bg-gray-900 min-h-screen">
       <h1 className="text-3xl font-bold text-white mb-8 font-audiowide">Your Cart</h1>
@@ -128,7 +133,7 @@ function Cart() {
           Clear Cart
         </button>
         <button
-          onClick={() => navigate('/payment')} // Navigate to payment page
+          onClick={() => handleProceedToCheckout()} // Clear cart and proceed to payment
           className="bg-white text-black py-2 px-6 rounded-lg shadow-md font-bold hover:bg-gray-200 transition-colors"
         >
           Proceed to Checkout
