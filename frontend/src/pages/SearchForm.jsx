@@ -151,21 +151,28 @@ const SearchForm = () => {
         >
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-4 mb-4 flex-wrap justify-center">
-              {["Gaming Gear", "Phones and Tablets", "Accessories", "Camera", "Gadgets"].map(
-                (category) => (
-                  <label key={category} className="flex items-center text-gray-200">
-                    <input
-                      type="radio"
-                      name="category"
-                      value={category}
-                      checked={filters.category === category}
-                      onChange={handleInputChange}
-                      className="mr-2"
-                    />
-                    {category}
-                  </label>
-                )
-              )}
+              {[
+                "Phones and Tablets",
+                "Accessories",
+                "Camera",
+                "Desktop Components",
+                "Laptops",
+                "Headphones and Earbuds",
+                "Consoles",
+                "Watches",
+              ].map((category) => (
+                <label key={category} className="flex items-center text-gray-200">
+                  <input
+                    type="radio"
+                    name="category"
+                    value={category}
+                    checked={filters.category === category}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  {category}
+                </label>
+              ))}
             </div>
             <input
               type="text"
