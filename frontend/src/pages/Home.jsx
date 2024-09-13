@@ -7,7 +7,6 @@ import { faBars, faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icon
 import api from "../api";
 import 'typeface-audiowide';
 
-
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 
@@ -134,42 +133,69 @@ function Home() {
 
   const { categorizedProducts, sortedCategories } = groupProductsByCategory();
 
+  // Function to refresh the homepage
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-900">
       <div
-        ref={sidebarRef}
-        className={`fixed left-0 top-0 h-full bg-gradient-to-b from-navy-900 to-black shadow-lg z-50 transform ${
-          sidebarVisible ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300`}
-        onMouseEnter={() => setSidebarVisible(true)}
-        onMouseLeave={() => setSidebarVisible(false)}
-      >
-        <div className="p-4">
-          <button
-            className="w-full text-left p-2 hover:bg-black text-white transition-colors mb-4"
-            onClick={() => navigate("/search")}
-          >
-            Search for products
-          </button>
-          <button
-            className="w-full text-left p-2 hover:bg-black text-white transition-colors"
-            onClick={() => navigate("/profilePage")}
-          >
-            Profile
-          </button>
-        </div>
-      </div>
+  ref={sidebarRef}
+  className={`fixed left-0 top-0 h-full bg-gradient-to-b from-navy-900 to-black shadow-lg z-50 transform ${
+    sidebarVisible ? "translate-x-0" : "-translate-x-full"
+  } transition-transform duration-300`}
+  onMouseEnter={() => setSidebarVisible(true)}
+  onMouseLeave={() => setSidebarVisible(false)}
+>
+  {/* Sidebar Content */}
+  <div className="p-4">
+    {/* Logo at the top */}
+    <div className="flex items-center justify-center mb-6">
+      <img
+        src="/logo.png" // Replace with your logo path
+        alt="Logo"
+        className="w-20 h-20 rounded-full cursor-pointer"
+        onClick={null} // Refresh the homepage when clicked
+      />
+    </div>
+
+    <button
+      className="w-full text-left p-2 hover:bg-black text-white transition-colors mb-4"
+      onClick={() => navigate("/search")}
+    >
+      Search for products
+    </button>
+
+    <button
+      className="w-full text-left p-2 hover:bg-black text-white transition-colors"
+      onClick={() => navigate("/profilePage")}
+    >
+      Profile
+    </button>
+  </div>
+</div>
+
 
       <div className="flex flex-col items-center w-full">
         <div className="flex w-full justify-between items-center bg-gray-800 p-4 shadow-md">
-          <button
-            ref={sidebarButtonRef}
-            className="text-3xl text-white"
-            onClick={handleSidebarToggle}
-            onMouseEnter={() => setSidebarVisible(true)}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </button>
+          <div className="flex items-center">
+            <button
+              ref={sidebarButtonRef}
+              className="text-3xl text-white"
+              onClick={handleSidebarToggle}
+              onMouseEnter={() => setSidebarVisible(true)}
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+            {/* Circular logo icon next to the sidebar icon */}
+            <img
+              src="/logo.png"  // Replace with your logo path
+              alt="Logo"
+              className="w-12 h-12 rounded-full ml-4 cursor-pointer"
+              onClick={refreshPage}  // Refresh the homepage
+            />
+          </div>
 
           <h1 className="text-4xl font-audiowide text-white ml-8">Tech Trove</h1>
 
@@ -240,7 +266,7 @@ function Home() {
     <Carousel
       autoPlay
       infiniteLoop
-      interval={5000}
+      interval={2000}
       showThumbs={false}
       showStatus={false}
       showArrows={true}
