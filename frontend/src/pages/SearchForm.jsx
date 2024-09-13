@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import Table from "./Table";
@@ -133,14 +131,14 @@ const SearchForm = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-gray-200 py-8">
-      {/* Centered Home Button */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 mb-8">
-        <button
-          onClick={() => navigate("/")}
-          className="text-2xl bg-white text-black border border-black p-2 rounded transition-colors"
-          style={{ width: "3rem", height: "3rem" }}
-        >
-          <FontAwesomeIcon icon={faHome} />
+      {/* Logo Button */}
+      <div className="absolute top-4 left-4 mb-8">
+        <button onClick={() => navigate("/")} className="p-2">
+          <img
+            src="/logo.png" // Replace with the actual path to your logo image
+            alt="Logo"
+            className="w-12 h-12 rounded-full" // Set the size and make it circular
+          />
         </button>
       </div>
 
@@ -246,11 +244,11 @@ const SearchForm = () => {
 
         {/* Search Results Table */}
         <Table
-         products={searchResults} // Use searchResults for displaying
-         onEdit={handleEditProduct}
-         onDelete={handleDeleteProduct}
-         admin={admin}
-       />
+          products={searchResults} // Use searchResults for displaying
+          onEdit={handleEditProduct}
+          onDelete={handleDeleteProduct}
+          admin={admin}
+        />
       </div>
     </div>
   );

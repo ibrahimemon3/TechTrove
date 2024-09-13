@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faSave, faCamera, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import 'typeface-audiowide'; // Import Audiowide font
 
@@ -76,19 +76,20 @@ const ProfilePage = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white'>
-      {/* Centered Home Button */}
-      <div className='absolute top-4 left-1/2 transform -translate-x-1/2'>
-        <button
-          onClick={() => navigate('/')}
-          className='text-2xl bg-white text-black border border-black p-2 rounded transition-colors'
-          style={{ width: '3rem', height: '3rem' }} // Square shape
-        >
-          <FontAwesomeIcon icon={faHome} />
+      
+      {/* Circular Logo Image in Top Left */}
+      <div className='absolute top-4 left-4'>
+        <button onClick={() => navigate('/')}>
+          <img
+            src='/logo.png' // Replace with the correct path to your logo
+            alt='Logo'
+            className='w-12 h-12 rounded-full'
+          />
         </button>
       </div>
 
-      {/* "Your Profile" Text */}
-      <div className="absolute top-4 left-4">
+      {/* "Your Profile" Text - Position Adjusted */}
+      <div className="mb-4">
         <h2 className="text-3xl font-audiowide text-white">Your Profile</h2>
       </div>
 
