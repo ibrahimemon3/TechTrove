@@ -7,6 +7,10 @@ import { faBars, faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icon
 import api from "../api";
 import 'typeface-audiowide';
 
+
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
+
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -230,6 +234,121 @@ function Home() {
             </div>
           </div>
         </div>
+
+        <div className="w-full h-auto flex justify-center items-center mt-4">
+  <div className="w-full md:w-4/5 lg:w-3/4"> {/* Adjusted width */}
+    <Carousel
+      autoPlay
+      infiniteLoop
+      interval={5000}
+      showThumbs={false}
+      showStatus={false}
+      showArrows={true}
+      className="banner-slider"
+    >
+      <div>
+        <img
+          src="/banner1.jpg"
+          alt="Banner 1"
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '450px',
+            borderRadius: '0px', // Removed border radius for a borderless design
+            padding: '0px', // Removed padding
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+          style={{
+            position: 'absolute',
+            bottom: '0',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <p
+            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
+          >
+            Exclusive Offer on Electronics
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <img
+          src="/banner2.jpg"
+          alt="Banner 2"
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '450px',
+            borderRadius: '0px',
+            padding: '0px',
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+          style={{
+            position: 'absolute',
+            bottom: '0',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <p
+            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
+          >
+            Latest Gadgets at Unbeatable Prices
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <img
+          src="/banner3.jpg"
+          alt="Banner 3"
+          style={{
+            objectFit: 'cover',
+            width: '100%',
+            height: '450px',
+            borderRadius: '0px',
+            padding: '0px',
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+          style={{
+            position: 'absolute',
+            bottom: '0',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <p
+            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
+          >
+            New Arrivals: Tech for You
+          </p>
+        </div>
+      </div>
+    </Carousel>
+  </div>
+</div>
+
+
 
         <div className="w-full p-4">
           {/* Render each category with its products */}
