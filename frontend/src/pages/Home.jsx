@@ -108,6 +108,28 @@ function Home() {
     setTimeout(() => setFlashedProductId(null), 150);
   };
 
+  // Group products by category and sort both categories and products alphabetically
+  const groupProductsByCategory = () => {
+    const categorizedProducts = products.reduce((acc, product) => {
+      const category = product.category || "Other"; // Default category if not defined
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(product);
+      return acc;
+    }, {});
+
+    // Sort the categories alphabetically
+    const sortedCategories = Object.keys(categorizedProducts).sort();
+
+    // Sort products within each category alphabetically
+    sortedCategories.forEach(category => {
+      categorizedProducts[category].sort((a, b) => a.productName.localeCompare(b.productName));
+    });
+
+    return { categorizedProducts, sortedCategories };
+  };
+
+  const { categorizedProducts, sortedCategories } = groupProductsByCategory();
+
   return (
     <div className="flex min-h-screen bg-gray-900">
       <div
@@ -145,7 +167,6 @@ function Home() {
             <FontAwesomeIcon icon={faBars} />
           </button>
 
-          {/* Tech Trove Logo in Audiowide Font with Right Margin Adjustment */}
           <h1 className="text-4xl font-audiowide text-white ml-8">Tech Trove</h1>
 
           <div className="flex items-center">
@@ -163,7 +184,6 @@ function Home() {
               </button>
             )}
             <div className="relative flex items-center">
-              {/* Profile Image Button */}
               <button
                 onClick={togglePopup}
                 className="focus:outline-none ml-4"
@@ -211,40 +231,48 @@ function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-6 p-4">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              onClick={() => navigate(`/products/${product._id}`)}
-              className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full mx-auto transform hover:scale-105 transition-transform duration-300 cursor-pointer relative"
-              style={{ height: '24rem' }}
-            >
-              <img
-                src={product.image}
-                alt={product.productName}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {product.productName}
-                </h3>
-                <p className="text-gray-400 mb-4">${product.price}</p>
-              </div>
-              {!isAdmin && ( // Show the "Add to Cart" button only for non-admin users
-                <div className="p-4 text-center absolute bottom-0 w-full">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onAddToCart(product);
-                    }}
-                    className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
-                      flashedProductId === product._id ? "flash-animation" : ""
-                    }`}
+        <div className="w-full p-4">
+          {/* Render each category with its products */}
+          {sortedCategories.map((category) => (
+            <div key={category} className="mb-12"> {/* Increased margin between categories */}
+              <h2 className="text-3xl font-audiowide text-white mb-8">{category}</h2> {/* Increased font size */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-6">
+                {categorizedProducts[category].map((product) => (
+                  <div
+                    key={product._id}
+                    onClick={() => navigate(`/products/${product._id}`)}
+                    className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full mx-auto transform hover:scale-105 transition-transform duration-300 cursor-pointer relative"
+                    style={{ height: '24rem' }}
                   >
-                    Add to Cart
-                  </button>
-                </div>
-              )}
+                    <img
+                      src={product.image}
+                      alt={product.productName}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4 text-center">
+                      <h3 className="text-lg font-semibold text-white mb-2">
+                        {product.productName}
+                      </h3>
+                      <p className="text-gray-400 mb-4">${product.price}</p>
+                    </div>
+                    {!isAdmin && (
+                      <div className="p-4 text-center absolute bottom-0 w-full">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart(product);
+                          }}
+                          className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
+                            flashedProductId === product._id ? "flash-animation" : ""
+                          }`}
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
