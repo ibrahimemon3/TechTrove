@@ -58,7 +58,7 @@ function Login() {
         src='/logo.png' 
         alt='Logo' 
         className='absolute top-0 left-0 p-4'
-        style={{ width: '300px' }} 
+        style={{ width: '150px' }} 
       />
       <div className='bg-gray-800 p-8 rounded-lg w-full max-w-md shadow-md'>
         <h1 className='mb-5 text-2xl font-bold text-center text-white'>Login</h1>

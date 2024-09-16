@@ -173,6 +173,16 @@ function Home() {
     >
       Profile
     </button>
+    
+     {isAdmin && (
+            <button
+              className="w-full text-left p-2 hover:bg-black text-white transition-colors mt-4"
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </button>
+          )}
+
   </div>
 </div>
 

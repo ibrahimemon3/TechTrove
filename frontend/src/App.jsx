@@ -9,7 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import Cart from './pages/Cart';
 import ProductDetails from './pages/ProductDetails';
 import Payment from './pages/PaymentPage';
-
+import Dashboard from './pages/Dashboard';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -26,6 +26,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/profilePage" element={<PrivateRoute element={<ProfilePage />} />} />
+        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
         <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
         <Route path="/payment" element={<PrivateRoute element={<Payment />} />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
