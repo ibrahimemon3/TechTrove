@@ -172,9 +172,9 @@ function Home() {
       onClick={() => navigate("/profilePage")}
     >
       Profile
-    </button>
-    
-     {isAdmin && (
+     </button>
+
+       {isAdmin && (
             <button
               className="w-full text-left p-2 hover:bg-black text-white transition-colors mt-4"
               onClick={() => navigate("/dashboard")}
@@ -183,8 +183,8 @@ function Home() {
             </button>
           )}
 
-  </div>
-</div>
+       </div>
+    </div>
 
 
       <div className="flex flex-col items-center w-full">
