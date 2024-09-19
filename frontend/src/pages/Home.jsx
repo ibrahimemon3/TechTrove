@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { handleSuccess } from "../utils";
 import { ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faShoppingCart,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import api from "../api";
-import 'typeface-audiowide';
+import "typeface-audiowide";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 
 function Home() {
   const [loggedInUser, setLoggedInUser] = useState("");
@@ -18,8 +22,8 @@ function Home() {
   const [cartCount, setCartCount] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [flashedProductId, setFlashedProductId] = useState(null);
-  const [profileImage, setProfileImage] = useState(''); // For the profile image
-  
+  const [profileImage, setProfileImage] = useState(""); // For the profile image
+
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
   const popupRef = useRef(null);
@@ -97,10 +101,13 @@ function Home() {
   const onAddToCart = (product) => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    const existingProductIndex = cart.findIndex((item) => item._id === product._id);
+    const existingProductIndex = cart.findIndex(
+      (item) => item._id === product._id
+    );
 
     if (existingProductIndex > -1) {
-      cart[existingProductIndex].quantity = (cart[existingProductIndex].quantity || 1) + 1;
+      cart[existingProductIndex].quantity =
+        (cart[existingProductIndex].quantity || 1) + 1;
     } else {
       cart.push({ ...product, quantity: 1 });
     }
@@ -124,8 +131,10 @@ function Home() {
     const sortedCategories = Object.keys(categorizedProducts).sort();
 
     // Sort products within each category alphabetically
-    sortedCategories.forEach(category => {
-      categorizedProducts[category].sort((a, b) => a.productName.localeCompare(b.productName));
+    sortedCategories.forEach((category) => {
+      categorizedProducts[category].sort((a, b) =>
+        a.productName.localeCompare(b.productName)
+      );
     });
 
     return { categorizedProducts, sortedCategories };
@@ -139,42 +148,42 @@ function Home() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900">
+    <div className="flex min-h-screen bg-gray-900 flex-col">
       <div
-  ref={sidebarRef}
-  className={`fixed left-0 top-0 h-full bg-gradient-to-b from-navy-900 to-black shadow-lg z-50 transform ${
-    sidebarVisible ? "translate-x-0" : "-translate-x-full"
-  } transition-transform duration-300`}
-  onMouseEnter={() => setSidebarVisible(true)}
-  onMouseLeave={() => setSidebarVisible(false)}
->
-  {/* Sidebar Content */}
-  <div className="p-4">
-    {/* Logo at the top */}
-    <div className="flex items-center justify-center mb-6">
-      <img
-        src="/logo.png" // Replace with your logo path
-        alt="Logo"
-        className="w-20 h-20 rounded-full cursor-pointer"
-        onClick={null} // Refresh the homepage when clicked
-      />
-    </div>
+        ref={sidebarRef}
+        className={`fixed left-0 top-0 h-full bg-gradient-to-b from-navy-900 to-black shadow-lg z-50 transform ${
+          sidebarVisible ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300`}
+        onMouseEnter={() => setSidebarVisible(true)}
+        onMouseLeave={() => setSidebarVisible(false)}
+      >
+        {/* Sidebar Content */}
+        <div className="p-4">
+          {/* Logo at the top */}
+          <div className="flex items-center justify-center mb-6">
+            <img
+              src="/logo.png" // Replace with your logo path
+              alt="Logo"
+              className="w-20 h-20 rounded-full cursor-pointer"
+              onClick={null} // Refresh the homepage when clicked
+            />
+          </div>
 
-    <button
-      className="w-full text-left p-2 hover:bg-black text-white transition-colors mb-4"
-      onClick={() => navigate("/search")}
-    >
-      Search for products
-    </button>
+          <button
+            className="w-full text-left p-2 hover:bg-black text-white transition-colors mb-4"
+            onClick={() => navigate("/search")}
+          >
+            Search for products
+          </button>
 
-    <button
-      className="w-full text-left p-2 hover:bg-black text-white transition-colors"
-      onClick={() => navigate("/profilePage")}
-    >
-      Profile
-     </button>
+          <button
+            className="w-full text-left p-2 hover:bg-black text-white transition-colors"
+            onClick={() => navigate("/profilePage")}
+          >
+            Profile
+          </button>
 
-       {isAdmin && (
+          {isAdmin && (
             <button
               className="w-full text-left p-2 hover:bg-black text-white transition-colors mt-4"
               onClick={() => navigate("/dashboard")}
@@ -182,10 +191,8 @@ function Home() {
               Dashboard
             </button>
           )}
-
-       </div>
-    </div>
-
+        </div>
+      </div>
 
       <div className="flex flex-col items-center w-full">
         <div className="flex w-full justify-between items-center bg-gray-800 p-4 shadow-md">
@@ -200,14 +207,16 @@ function Home() {
             </button>
             {/* Circular logo icon next to the sidebar icon */}
             <img
-              src="/logo.png"  // Replace with your logo path
+              src="/logo.png" // Replace with your logo path
               alt="Logo"
               className="w-12 h-12 rounded-full ml-4 cursor-pointer"
-              onClick={refreshPage}  // Refresh the homepage
+              onClick={refreshPage} // Refresh the homepage
             />
           </div>
 
-          <h1 className="text-4xl font-audiowide text-white ml-8">Tech Trove</h1>
+          <h1 className="text-4xl font-audiowide text-white ml-8">
+            Tech Trove
+          </h1>
 
           <div className="flex items-center">
             {!isAdmin && (
@@ -224,10 +233,7 @@ function Home() {
               </button>
             )}
             <div className="relative flex items-center">
-              <button
-                onClick={togglePopup}
-                className="focus:outline-none ml-4"
-              >
+              <button onClick={togglePopup} className="focus:outline-none ml-4">
                 {profileImage ? (
                   <img
                     src={profileImage}
@@ -255,9 +261,14 @@ function Home() {
                         className="w-16 h-16 rounded-full mb-2"
                       />
                     ) : (
-                      <FontAwesomeIcon icon={faUser} className="text-4xl text-gray-400 mb-2" />
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        className="text-4xl text-gray-400 mb-2"
+                      />
                     )}
-                    <span className="text-white text-lg mb-2">{loggedInUser}</span>
+                    <span className="text-white text-lg mb-2">
+                      {loggedInUser}
+                    </span>
                     <button
                       onClick={handleLogout}
                       className="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
@@ -272,132 +283,146 @@ function Home() {
         </div>
 
         <div className="w-full h-auto flex justify-center items-center mt-4">
-  <div className="w-full md:w-4/5 lg:w-3/4"> {/* Adjusted width */}
-    <Carousel
-      autoPlay
-      infiniteLoop
-      interval={2000}
-      showThumbs={false}
-      showStatus={false}
-      showArrows={true}
-      className="banner-slider"
-    >
-      <div>
-        <img
-          src="/banner1.jpg"
-          alt="Banner 1"
-          style={{
-            objectFit: 'cover',
-            width: '100%',
-            height: '450px',
-            borderRadius: '0px', // Removed border radius for a borderless design
-            padding: '0px', // Removed padding
-          }}
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
-          style={{
-            position: 'absolute',
-            bottom: '0',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <p
-            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
-            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
-          >
-            Exclusive Offer on Electronics
-          </p>
+          <div className="w-full md:w-4/5 lg:w-3/4">
+            {" "}
+            {/* Adjusted width */}
+            <Carousel
+              autoPlay
+              infiniteLoop
+              interval={2000}
+              showThumbs={false}
+              showStatus={false}
+              showArrows={true}
+              className="banner-slider"
+            >
+              <div>
+                <img
+                  src="/banner1.jpg"
+                  alt="Banner 1"
+                  style={{
+                    objectFit: "cover",
+                    width: "100%",
+                    height: "450px",
+                    borderRadius: "0px", // Removed border radius for a borderless design
+                    padding: "0px", // Removed padding
+                  }}
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+                    style={{
+                      fontFamily: "Audiowide, sans-serif",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    Exclusive Offer on Electronics
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <img
+                  src="/banner2.jpg"
+                  alt="Banner 2"
+                  style={{
+                    objectFit: "cover",
+                    width: "100%",
+                    height: "450px",
+                    borderRadius: "0px",
+                    padding: "0px",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+                    style={{
+                      fontFamily: "Audiowide, sans-serif",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    Latest Gadgets at Unbeatable Prices
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <img
+                  src="/banner3.jpg"
+                  alt="Banner 3"
+                  style={{
+                    objectFit: "cover",
+                    width: "100%",
+                    height: "450px",
+                    borderRadius: "0px",
+                    padding: "0px",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
+                    style={{
+                      fontFamily: "Audiowide, sans-serif",
+                      letterSpacing: "0.05em",
+                    }}
+                  >
+                    New Arrivals: Tech for You
+                  </p>
+                </div>
+              </div>
+            </Carousel>
+          </div>
         </div>
-      </div>
-
-      <div>
-        <img
-          src="/banner2.jpg"
-          alt="Banner 2"
-          style={{
-            objectFit: 'cover',
-            width: '100%',
-            height: '450px',
-            borderRadius: '0px',
-            padding: '0px',
-          }}
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
-          style={{
-            position: 'absolute',
-            bottom: '0',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <p
-            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
-            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
-          >
-            Latest Gadgets at Unbeatable Prices
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <img
-          src="/banner3.jpg"
-          alt="Banner 3"
-          style={{
-            objectFit: 'cover',
-            width: '100%',
-            height: '450px',
-            borderRadius: '0px',
-            padding: '0px',
-          }}
-        />
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
-          style={{
-            position: 'absolute',
-            bottom: '0',
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <p
-            className="text-xl font-bold text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg"
-            style={{ fontFamily: 'Audiowide, sans-serif', letterSpacing: '0.05em' }}
-          >
-            New Arrivals: Tech for You
-          </p>
-        </div>
-      </div>
-    </Carousel>
-  </div>
-</div>
-
-
 
         <div className="w-full p-4">
           {/* Render each category with its products */}
           {sortedCategories.map((category) => (
-            <div key={category} className="mb-12"> {/* Increased margin between categories */}
-              <h2 className="text-3xl font-audiowide text-white mb-8">{category}</h2> {/* Increased font size */}
+            <div key={category} className="mb-12">
+              {" "}
+              {/* Increased margin between categories */}
+              <h2 className="text-3xl font-audiowide text-white mb-8">
+                {category}
+              </h2>{" "}
+              {/* Increased font size */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-6">
                 {categorizedProducts[category].map((product) => (
                   <div
                     key={product._id}
                     onClick={() => navigate(`/products/${product._id}`)}
                     className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full mx-auto transform hover:scale-105 transition-transform duration-300 cursor-pointer relative"
-                    style={{ height: '24rem' }}
+                    style={{ height: "24rem" }}
                   >
                     <img
                       src={product.image}
@@ -418,7 +443,9 @@ function Home() {
                             onAddToCart(product);
                           }}
                           className={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition ${
-                            flashedProductId === product._id ? "flash-animation" : ""
+                            flashedProductId === product._id
+                              ? "flash-animation"
+                              : ""
                           }`}
                         >
                           Add to Cart
@@ -432,6 +459,74 @@ function Home() {
           ))}
         </div>
       </div>
+
+      <footer className="w-full bg-gray-800 p-6 flex flex-col items-center">
+        {/* Logo on the left side */}
+        <div className="flex items-center mb-4">
+          <img
+            src="/logo.png" // Replace with your logo path
+            alt="Logo"
+            className="w-16 h-16 rounded-full"
+          />
+        </div>
+
+        {/* Centered text and social media icons */}
+        <div className="flex flex-col items-center mb-4">
+          <p className="text-gray-400 text-sm mb-2">
+            A project by Finders (Ibrahim Hossain Emon (20220104088) and
+            Tahmidul Islam (20220104102))
+          </p>
+          <div className="flex space-x-4 mb-4">
+            <button className="text-gray-400 hover:text-white transition">
+              <img src="/facebook.jpg" alt="Facebook" className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition">
+              <img src="/x.jpg" alt="X" className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition">
+              <img src="/youtube.jpg" alt="YouTube" className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition">
+              <img src="/instagram.jpg" alt="Instagram" className="w-6 h-6" />
+            </button>
+            <button className="text-gray-400 hover:text-white transition">
+              <img src="/linkedin.jpg" alt="LinkedIn" className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        {/* Contact Us section */}
+        <div className="flex flex-col items-center mb-4">
+          <h3 className="text-white text-lg font-semibold mb-2">Contact Us</h3>
+          <p className="text-gray-400 text-sm mb-1">
+            Ibrahim Hossain Emon:{" "}
+            <a
+              href="mailto:ibrahim.cse.20220104088@gmail.com"
+              className="text-blue-400 hover:text-blue-300"
+            >
+              ibrahim.cse.20220104088@gmail.com
+            </a>
+          </p>
+          <p className="text-gray-400 text-sm">
+            Tahmidul Islam:{" "}
+            <a
+              href="mailto:tahmid.cse.20220104102@aust.edu"
+              className="text-blue-400 hover:text-blue-300"
+            >
+              tahmid.cse.20220104102@aust.edu
+            </a>
+          </p>
+        </div>
+
+        {/* Scroll-to-Top Button */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="mt-4 bg-white text-gray-800 rounded-lg px-4 py-2 hover:bg-gray-100 transition"
+          title="Scroll to top"
+        >
+          Scroll to top
+        </button>
+      </footer>
 
       <ToastContainer />
     </div>
