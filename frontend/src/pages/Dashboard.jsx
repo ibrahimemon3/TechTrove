@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import api from '../api';
 import { Chart, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 Chart.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 function Dashboard() {
   const [categoryData, setCategoryData] = useState({});
   const [totalProducts, setTotalProducts] = useState(0);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -46,8 +46,26 @@ function Dashboard() {
         {
           label: 'Product Categories',
           data: counts,
-          backgroundColor: ['#FF4F81', '#36A2EB', '#FFC658', '#4BC0C0', '#AF52DE', '#F38B40'],
-          hoverBackgroundColor: ['#FF3671', '#1E90FF', '#FFA033', '#31A2A0', '#8A36CB', '#E76E20'],
+          backgroundColor: [
+            '#8A2BE2', // Violet
+            '#00FFFF', // Cyan
+            '#32CD32', // Green
+            '#FF6347', // Red
+            '#FFD700', // Yellow
+            '#1E90FF', // Blue
+            '#FFA500', // Orange
+            '#FFFFFF', // White
+          ],
+          hoverBackgroundColor: [
+            '#7B68EE', // MediumSlateBlue (for Violet)
+            '#00CED1', // DarkTurquoise (for Cyan)
+            '#228B22', // ForestGreen (for Green)
+            '#FF4500', // OrangeRed (for Red)
+            '#FFD700', // Gold (for Yellow)
+            '#4169E1', // RoyalBlue (for Blue)
+            '#FF8C00', // DarkOrange (for Orange)
+            '#F8F8FF', // GhostWhite (for White)
+          ],
           borderColor: '#333333',
           borderWidth: 2,
           hoverBorderColor: '#FFFFFF',
