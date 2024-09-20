@@ -17,6 +17,7 @@ const SearchForm = () => {
   const [products, setProducts] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false); 
 
   const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ const SearchForm = () => {
   }, []);
 
   const fetchProducts = async () => {
+    setLoading(true); 
     try {
       const response = await api.get("/products");
       setProducts(response.data);
@@ -35,6 +37,7 @@ const SearchForm = () => {
     } catch (err) {
       console.error("Error fetching products:", err);
     }
+    setLoading(false); // End loading
   };
 
   const handleInputChange = (e) => {
@@ -60,7 +63,7 @@ const SearchForm = () => {
       return Object.keys(filters).every((key) => {
         if (!filters[key]) return true;
         if (key === "price") {
-          // Handle price comparison (convert to string for comparison)
+          
           return product[key] === Number(filters[key]);
         }
         return product[key]
@@ -77,11 +80,12 @@ const SearchForm = () => {
       if (editIndex !== null) {
         const updatedProduct = { ...filters };
         const response = await api.put(
-          `/products/${products[editIndex]._id}`,
+          `/products/${searchResults[editIndex]._id}`, // Use `searchResults` instead of `products`
           updatedProduct
         );
-        const updatedProducts = [...products];
-        updatedProducts[editIndex] = response.data.product;
+        const updatedProducts = products.map((product) =>
+          product._id === searchResults[editIndex]._id ? response.data.product : product
+        );
         setProducts(updatedProducts);
         setEditIndex(null);
       } else {
@@ -93,24 +97,26 @@ const SearchForm = () => {
       console.error("Error adding/updating product:", err);
     }
   };
-
-  const handleEditProduct = (index) => {
-    const productToEdit = products[index];
+  
+  const handleEditProduct = (productId) => {
+    const productToEdit = searchResults.find((product) => product._id === productId); // Find product by ID in searchResults
     setFilters(productToEdit);
-    setEditIndex(index);
+    const indexInSearchResults = searchResults.findIndex((product) => product._id === productId);
+    setEditIndex(indexInSearchResults); // Set the index relative to searchResults
   };
-
-  const handleDeleteProduct = async (index) => {
+  
+  const handleDeleteProduct = async (productId) => {
     try {
-      const productId = products[index]._id;
       await api.delete(`/products/${productId}`);
-      const updatedProducts = products.filter((_, i) => i !== index);
+      const updatedProducts = products.filter((product) => product._id !== productId);
       setProducts(updatedProducts);
       setSearchResults(updatedProducts); // Update the search results after deletion
     } catch (err) {
       console.error("Error deleting product:", err);
     }
   };
+  
+  
 
   const resetFilters = () => {
     setFilters({
@@ -242,13 +248,24 @@ const SearchForm = () => {
           </button>
         </form>
 
-        {/* Search Results Table */}
-        <Table
-          products={searchResults} // Use searchResults for displaying
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
-          admin={admin}
-        />
+        {/* Search Results Table or Loading Animation */}
+        {loading ? (
+          <div className="flex justify-center items-center space-x-2 mt-12">
+            {/* Spinning wheel */}
+            <div
+              className="w-12 h-12 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"
+              role="status"
+            ></div>
+            <span className="text-white text-2xl">Loading...</span> {/* Optional text */}
+          </div>
+        ) : (
+          <Table
+            products={searchResults} // Use searchResults for displaying
+            onEdit={handleEditProduct}
+            onDelete={handleDeleteProduct}
+            admin={admin}
+          />
+        )}
       </div>
     </div>
   );
