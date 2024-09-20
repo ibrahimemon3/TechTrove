@@ -7,16 +7,16 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const navigate = useNavigate();
-  const [flashedProductId, setFlashedProductId] = useState(null); // Add flashedProductId state for button flash effect
-  const [cartCount, setCartCount] = useState(0); // Add cart count state
-  const [isAdmin, setIsAdmin] = useState(false); // Add state for admin check
+  const [flashedProductId, setFlashedProductId] = useState(null); 
+  const [cartCount, setCartCount] = useState(0); 
+  const [isAdmin, setIsAdmin] = useState(false); 
 
   useEffect(() => {
     fetchProductDetails();
     fetchRelatedProducts();
-    updateCartCount(); // Update the cart count when the page loads
+    updateCartCount(); 
     const loggedInUserAdmin = localStorage.getItem("loggedinUserAdmin");
-    setIsAdmin(loggedInUserAdmin === "true"); // Check if the user is admin
+    setIsAdmin(loggedInUserAdmin === "true"); 
   }, []);
 
   const fetchProductDetails = async () => {
@@ -37,7 +37,7 @@ function ProductDetails() {
     }
   };
 
-  // Function to update cart count from localStorage
+ 
   const updateCartCount = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartCount(cart.reduce((total, item) => total + item.quantity, 0));
@@ -67,17 +67,39 @@ function ProductDetails() {
 
   const handleBuyNow = () => {
     if (product) {
-      onAddToCart(product); // Add the product to the cart with a quantity of 1
-      navigate('/cart'); // Navigate to the cart page
+      onAddToCart(product); 
+      navigate('/cart'); 
     }
   };
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
+        <div className="flex justify-center items-center space-x-2">
+          {/* Spinning wheel */}
+          <div
+            className="w-12 h-12 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"
+            role="status"
+          ></div>
+          <span className="text-white text-2xl">Loading...</span> {/* Optional text */}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-8">
+      {/* Back Button */}
+      <div className="absolute top-4 left-4">
+        <button onClick={() => navigate(-1)}>
+          <img
+            src="/logo.png" // Replace with the correct path to your back arrow icon
+            alt="Back"
+            className="w-12 h-12 rounded-full"
+          />
+        </button>
+      </div>
+
       <div className="max-w-7xl mx-auto bg-gray-800 shadow-lg rounded-lg p-12">
         <div className="flex flex-col lg:flex-row items-center">
           {/* Larger Product Image */}
@@ -87,11 +109,11 @@ function ProductDetails() {
             className="w-96 h-96 lg:w-[32rem] lg:h-[32rem] object-cover rounded-lg shadow-lg mb-8 lg:mb-0 lg:mr-16 transition-transform duration-300 hover:scale-105"
           />
           <div className="flex flex-col items-center lg:items-start text-white">
-            {/* Larger Product Name */}
+            {/* Product Name */}
             <h1 className="text-6xl font-bold mb-8">{product.productName}</h1>
-            {/* Larger Price */}
+            {/* Price */}
             <p className="text-4xl text-gray-300 mb-6">${product.price}</p>
-            {/* Larger Description */}
+            {/*  Description */}
             <p className="text-xl text-gray-400 leading-relaxed max-w-3xl mb-10">
               {product.description}
             </p>
