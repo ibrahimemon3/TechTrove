@@ -112,7 +112,7 @@ function ProductDetails() {
             {/* Product Name */}
             <h1 className="text-6xl font-bold mb-8">{product.productName}</h1>
             {/* Price */}
-            <p className="text-4xl text-gray-300 mb-6">${product.price}</p>
+            <p className="text-4xl text-gray-300 mb-6">৳{product.price}</p>
             {/*  Description */}
             <p className="text-xl text-gray-400 leading-relaxed max-w-3xl mb-10">
               {product.description}
@@ -158,7 +158,7 @@ function ProductDetails() {
                 <h3 className="text-2xl font-semibold text-white mb-2">
                   {relatedProduct.productName}
                 </h3>
-                <p className="text-gray-400">${relatedProduct.price}</p>
+                <p className="text-gray-400">৳{relatedProduct.price}</p>
               </div>
             ))}
           </div>
