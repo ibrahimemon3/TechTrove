@@ -433,7 +433,7 @@ function Home() {
                       <h3 className="text-lg font-semibold text-white mb-2">
                         {product.productName}
                       </h3>
-                      <p className="text-gray-400 mb-4">${product.price}</p>
+                      <p className="text-gray-400 mb-4">৳{product.price}</p>
                     </div>
                     {!isAdmin && (
                       <div className="p-4 text-center absolute bottom-0 w-full">
